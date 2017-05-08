@@ -35,14 +35,30 @@ func TestSortToIndexJumble(t *testing.T) {
 	}
 }
 
-func BenchmarkSortToIndexRandom(b *testing.B) {
-	ordered := make([]int, 100)
-	for i := range ordered {
-		ordered[i] = i
-	}
+func BenchmarkSortToIndexRandom1(b *testing.B) {
+	benchmarkSortToIndexRandom(b, 1)
+}
+
+func BenchmarkSortToIndexRandom2(b *testing.B) {
+	benchmarkSortToIndexRandom(b, 2)
+}
+
+func BenchmarkSortToIndexRandom4(b *testing.B) {
+	benchmarkSortToIndexRandom(b, 4)
+}
+
+func BenchmarkSortToIndexRandom8(b *testing.B) {
+	benchmarkSortToIndexRandom(b, 8)
+}
+
+func BenchmarkSortToIndexRandom16(b *testing.B) {
+	benchmarkSortToIndexRandom(b, 16)
+}
+
+func benchmarkSortToIndexRandom(b *testing.B, n int) {
 	for i := 0; i < b.N; i++ {
 		b.StopTimer()
-		shuffled := sort.IntSlice(rand.Perm(100))
+		shuffled := sort.IntSlice(rand.Perm(n))
 		b.StartTimer()
 		SortToIndex(shuffled)
 	}
