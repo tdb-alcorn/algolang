@@ -25,12 +25,23 @@ func TestInsert(t *testing.T) {
 func TestPop(t *testing.T) {
 	heap := Heapify([]float64{3, 6, 8, 9, 2})
 	t.Log(heap)
-	v := Pop(&heap)
+	v, err := Pop(&heap)
+	if err != nil {
+		t.Error(err)
+	}
 	t.Log(v)
 	if !isHeap(heap) {
 		t.Errorf("Not a heap: %#v", heap)
 	}
 	if v != 2 {
 		t.Errorf("Did not pop root, popped %f %#v", v, heap)
+	}
+}
+
+func TestEmpty(t *testing.T) {
+	heap := Heapify([]float64{})
+	_, err := Pop(&heap)
+	if err != EmptyHeapError {
+		t.Errorf("Pop failed to return EmptyHeapError, instead got %#v", err)
 	}
 }

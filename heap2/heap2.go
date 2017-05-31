@@ -1,6 +1,12 @@
 package heap2
 
+import (
+	"errors"
+)
+
 type Heap []float64
+
+var EmptyHeapError = errors.New("Heap is empty")
 
 func Heapify(f []float64) Heap {
 	h := Heap(f)
@@ -15,22 +21,41 @@ func Insert(h *Heap, value float64) {
 	siftUp(*h, len(*h)-1)
 }
 
-func Peak(h Heap) float64 {
-	return h[0]
+func Peak(h Heap) (float64, error) {
+	if empty(h) {
+		return 0, EmptyHeapError
+	}
+	return h[0], nil
 }
 
-func Pop(h *Heap) float64 {
+func Pop(h *Heap) (float64, error) {
+	if empty(*h) {
+		return 0, EmptyHeapError
+	}
 	last := len(*h) - 1
-	root := Replace(*h, (*h)[last])
+	root, err := Replace(*h, (*h)[last])
+	if err != nil {
+		return 0, err
+	}
 	*h = (*h)[:last]
-	return root
+	return root, nil
 }
 
-func Replace(h Heap, value float64) float64 {
+func Replace(h Heap, value float64) (float64, error) {
+	if empty(h) {
+		return 0, EmptyHeapError
+	}
 	root := h[0]
 	h[0] = value
 	siftDown(h, 0)
-	return root
+	return root, nil
+}
+
+func empty(h Heap) bool {
+	if len(h) == 0 {
+		return true
+	}
+	return false
 }
 
 func parent(i int) int {
