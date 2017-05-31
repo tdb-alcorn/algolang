@@ -25,13 +25,29 @@ func TestSortToIndexReverse(t *testing.T) {
 	}
 }
 
-func TestSortToIndexJumble(t *testing.T) {
-	i := []int{0, 1, 2, 3, 4}
-	j := []int{2, 1, 4, 3, 0}
-	order := SortToIndex(sort.IntSlice(j))
-	t.Log(order)
-	if !sliceEquals(i, j) {
-		t.Errorf("%s should be %s", order, i)
+func TestSortToIndexRandom10(t *testing.T) {
+	testSortToIndexRandom(t, 100, 10)
+}
+
+func TestSortToIndexRandom100(t *testing.T) {
+	testSortToIndexRandom(t, 10, 100)
+}
+
+func TestSortToIndexRandom1000(t *testing.T) {
+	testSortToIndexRandom(t, 1, 1000)
+}
+
+func testSortToIndexRandom(t *testing.T, numTests int, size int) {
+	sorted := make([]int, size)
+	for i := range sorted {
+		sorted[i] = i
+	}
+	for i := 0; i < numTests; i++ {
+		shuffled := sort.IntSlice(rand.Perm(size))
+		SortToIndex(shuffled)
+		if !sliceEquals(sorted, shuffled) {
+			t.Errorf("%s should be %s", shuffled, sorted)
+		}
 	}
 }
 
